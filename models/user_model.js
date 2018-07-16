@@ -16,7 +16,7 @@ export default class userModel{
         
     }
 
-    postRegister = function(data, callback) {
+    postRegister = (data, callback) => {
 
         this.pwd = crypto.createHash("md5")
           .update(data.password)
@@ -97,7 +97,7 @@ export default class userModel{
             email: data.email,
             password: this.pwd
           }).exec()
-          .then(function(doc) {
+          .then((doc) => {
       
             if (doc === null) {
       
@@ -109,7 +109,7 @@ export default class userModel{
               return callback(null, doc)
             }
       
-          }).catch(function(err) {
+          }).catch((err) =>{
             if (err.err_obj) {
               callback(null, null)
             } else {
@@ -148,6 +148,44 @@ export default class userModel{
               callback(null, doc)
             }
         })
+    }
+
+    getNameValidetes = (data, callback) =>{
+      User.findOne({
+        first_name: data.name
+      },(err, doc)=>{
+        if(err){
+          callback(err, null)
+        }
+        callback(null, doc)
+      })
+    }
+
+    findUserForRoom = (data, callback) =>{
+
+      User.find({
+       $and:[{
+              $or:[
+                {'first_name':{ $regex:data.search_str, $options: 'g'} },
+                {'last_name':{ $regex:data.search_str, $options: 'g'} },
+                {'email':{ $regex:data.search_str, $options: 'g'} },
+                {'eth_address':{ $regex:data.search_str, $options: 'g'} }
+              ],
+            },
+            {
+              $and:[
+                {'email':{"$ne":""} },
+                {'first_name':{"$nin":[null,""]} },
+                {'eth_address':{"$nin":[null,""]} },
+              ],
+            }
+          ] 
+      },{_id:1,first_name:1,last_name:1,email:1,eth_address:1}, (err , doc) =>{
+        if(err){
+          callback(err, null)
+        }
+        callback(null, doc)
+      })
     }
 
 }

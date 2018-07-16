@@ -1,20 +1,32 @@
-db = require('../config/db');
-moment = require('moment');
-var Schema = db.Schema;
+import db from '../config/db'
+import moment from 'moment'
+const Schema = db.Schema;
 
-var chatSchema = new Schema({
-    fromId: String,
-    toId: String,
-    from:  String,
+const MessageSchema = new Schema({
+    from: String,
     to: String,
-    message: String,
+    body: String,
     created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
     updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
     deleted_at: { type: String, default: null },
-    is_deleted: { type:Number, default:0}
+    is_deleted: { type: Array, default:[]}
+  });
+
+
+const chatSchema = new Schema({
+    receipent:  [String],
+    message: {
+      type: [MessageSchema],
+      default: undefined    
+    },
+    is_deleted: { type: Array, default:[]},
+    created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
+    updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
+    deleted_at: { type: String, default: null },
   });
   
   
-  module.exports = {
+  export default {
     chatSchema: chatSchema
   }
+
