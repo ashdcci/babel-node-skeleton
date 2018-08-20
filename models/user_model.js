@@ -253,15 +253,38 @@ export default class userModel{
 
 
     followUser = (data, callback) =>{
+      console.log(data)
+      let bulkOpr = fakeUser.collection.initializeOrderedBulkOp();
+      bulkOpr.find({'_id': db.Types.ObjectId(data.followerId)}).updateOne({ $push: {follower:{$each:[ db.Types.ObjectId(data.userId)], $position: 0 } }});
+      bulkOpr.find({'_id': db.Types.ObjectId(data.userId)}).updateOne({ $push: {following:{$each:[ db.Types.ObjectId(data.followerId)], $position: 0 } }});
+
+      bulkOpr.execute().then((doc)=>{
+        console.log(doc.isOk())
+        callback(null, doc)
+      }).catch((err)=>{
+        callback(err, null)
+      });
+  
+      return false
+      
+
+
       fakeUser.update(
-        {'email':{$ne:'Payton.Bartell50@yahoo.com'}},
-        { $addToSet: {'following':'Helga.Bergstrom33'} },{multi:true}, (err, doc) =>{
-          console.log(err, doc)
+        {'_id':data.followerId},
+        { $push: {follower:{$each:[data.userId], $position: 0 } }})
+        .then( (doc) =>{
+          if(doc.ok == 1){
+            return fakeUser.update({'_id':data.userId},
+            { $push: {following:{$each:[data.followerId], $position: 0 } }})
+          }
+        }).then((data1)=>{
+          if(data1){
+            callback(null, doc)
+          }
+        }).catch((err)=>{
           if(err){
-            
             callback(err, null)
           }
-          callback(null, doc)
         })
     }
 

@@ -10,7 +10,7 @@ const userModel = new user_model()
 
 export default class utilsController{
     constructor(){
-
+        this.tomodel = tomodel
     }
 
     insertFakeUser = (req, res, next) =>{
@@ -39,7 +39,11 @@ export default class utilsController{
 
     followUser = (req, res, next)=>{
         this.tomodel = {}
-        userModel.followUser(tomodel,(err, result) =>{
+        this.tomodel.followerId = req.body.followerId
+        this.tomodel.userId = req.headers['user_id']
+
+
+        userModel.followUser(this.tomodel,(err, result) =>{
             if(err || result.ok!=1){
                 return res.status(500).json({
                     status: 0
@@ -111,6 +115,7 @@ export default class utilsController{
                 
                 req.headers['user_id'] = doc._id
                 req.headers['username'] = doc.username
+                console.log(req.headers)
                 next();
     
             })

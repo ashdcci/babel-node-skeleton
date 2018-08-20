@@ -88,7 +88,7 @@ export default (app) =>{
             .post('/chat/search-user',authToken.checkAuthToken,chat.searchUserForRoom)            
             .post('/chat/insert',authToken.checkAuthToken,userProvider.checkUserName,chat.insertMessage)
             .get('/fake-user',utils.insertFakeUser)
-            .patch('/follow',utils.followUser)
+            .patch('/follow',utils.checkAuthToken,utils.followUser)
             .post('/add-post',utils.checkAuthToken,post.addPost)
             .post('/get-post',utils.checkAuthToken,post.findPost)
             .post('/follow',utils.checkAuthToken)
