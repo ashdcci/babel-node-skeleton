@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import moment from 'moment';
 import userSchema from '../schemas/userSchema'
 const User = db.model('User', userSchema.userSchema)
+const fakeUser = db.model('fakeUser',userSchema.fakeUserSchema)
 const pwd = ''
 const tomodel = {}
 export default class userModel{
@@ -14,6 +15,53 @@ export default class userModel{
             callback(null , doc)
         })
         
+    }
+
+
+    postFakeRegister = (data, callback) =>{
+      this.pwd = crypto.createHash("md5")
+          .update(data.password)
+          .digest('hex');
+      
+      
+        fakeUser.findOne({
+            email: data.email
+          }).exec()
+          .then((user) => {
+      
+            if (user != null) {
+      
+              throw ({
+                err_obj: 2
+              })
+      
+            } else {
+      
+              this.tomodel = {}
+              this.tomodel.email = data.email
+              this.tomodel.password = this.pwd
+              this.tomodel.access_token = data.access_token
+              this.tomodel.username = data.username
+              data.password = this.pwd
+              this.tomodel.first_name = (data.firstName !== undefined) ? data.firstName : ''
+              this.tomodel.last_name = (data.lastName !== undefined) ? data.lastName : ''
+            
+              let user_data = new fakeUser(this.tomodel)
+              user_data.save()
+              return callback(null, data)
+      
+            }
+      
+          }).catch((err) => {
+      
+            if (err.err_obj) {
+              callback(null, null)
+            } else {
+      
+              callback(err, null)
+            }
+      
+          })
     }
 
     postRegister = (data, callback) => {
@@ -150,6 +198,20 @@ export default class userModel{
         })
     }
 
+
+    getFakeUserHashAddressByToken = (data, callback) =>{
+      fakeUser.findOne({
+        access_token: data.access_token
+      }, (err, doc) =>{
+          if(err){
+            callback(err, null)
+          }else{
+  
+            callback(null, doc)
+          }
+      })
+  }
+
     getNameValidetes = (data, callback) =>{
       User.findOne({
         first_name: data.name
@@ -187,5 +249,40 @@ export default class userModel{
         callback(null, doc)
       })
     }
+
+
+
+    followUser = (data, callback) =>{
+      fakeUser.update(
+        {'email':{$ne:'Payton.Bartell50@yahoo.com'}},
+        { $addToSet: {'following':'Helga.Bergstrom33'} },{multi:true}, (err, doc) =>{
+          console.log(err, doc)
+          if(err){
+            
+            callback(err, null)
+          }
+          callback(null, doc)
+        })
+    }
+
+
+    addToTimeLine = (data, callback) =>{
+      fakeUser.update(
+        {'following':{$in:'Helga.Bergstrom33'}},
+        { $push: {timeline:{$each:[data.postId], $position: 0 } }},
+        {multi:true}, 
+        (err, doc) =>{
+          console.log(err, doc)
+          if(err){
+            callback(err, null)
+          }else{
+            callback(null, doc)
+          }
+          
+        })
+    }
+
+    
+
 
 }

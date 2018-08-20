@@ -9,6 +9,7 @@ const userSchema = new Schema({
   email:   { type: String,required: true, index: { unique: true }},
   password: String,
   access_token: String,
+  username:String,
   user_address:{type: String, default: null},
   address_private_key: {type: String, default: null},
   address_public_key: {type: String, default: null},
@@ -23,6 +24,21 @@ const userSchema = new Schema({
 });
 
 
+const fakeUserSchema = new Schema({
+  first_name:  String,
+  last_name: String,
+  email:   { type: String,required: true, index: { unique: true }},
+  password: String,
+  access_token: String,
+  username:String,
+  created_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
+  updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
+  following: {type: Array, default:[],index: true},
+  // followers: {type: Array, default:[]},
+  timeline:{type:Array,default:[],index: true}
+});
+
 export default {
-  userSchema: userSchema
+  userSchema: userSchema,
+  fakeUserSchema: fakeUserSchema
 }
