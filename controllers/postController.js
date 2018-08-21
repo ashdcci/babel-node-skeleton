@@ -31,13 +31,25 @@ export default class postController{
                 })
             }
 
-            this.addPostToFollowersTimeLine(req,result._id,next)
-
-            return res.status(200).json({
+            res.status(200).json({
                 status: 1,
                 msg: 'Post published on Platform',
                 result: result
             })
+
+            // this.addPostToFollowersTimeLine(req,result._id,(next)=>{
+
+            //     console.log(next)
+            //     if(next == 1){
+            //         // return res.status(200).json({
+            //         //     status: 1,
+            //         //     msg: 'Post published on Platform',
+            //         //     result: result
+            //         // })
+            //     }
+            // })
+
+            return false
 
         })
     }
@@ -98,14 +110,35 @@ export default class postController{
         this.tomodel.latestPostId = postId
         this.tomodel.userId = req.headers['user_id']
         this.tomodel.username = req.headers['username']
-        console.log(this.tomodel)
+        
         postModel.addPostToFollowersTimeLine(this.tomodel,(err, results) =>{
             if(err){
                 console.log('err occured:',err)
             }
         })
-
+        next(1)
         return
+    }
+
+
+
+    getUserTimeLine = (req, res) =>{
+        this.tomodel = {}
+        this.tomodel.userId = req.headers['user_id']
+
+        postModel.getUserTimeLine(this.tomodel, (err, results) =>{
+            if(err){
+                return res.status(500).json({
+                    status : 0
+                })
+            }
+
+            return res.status(200).json({
+                status : 1,
+                postData:results
+            })
+
+        })
     }
 
 

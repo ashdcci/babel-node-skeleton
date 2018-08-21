@@ -46,7 +46,7 @@ export default class postModel{
 
         fakeUser.ensureIndexes({_id:1})
         fakeUser.update(
-            {'following':{$in:data.username}},
+            {'following':{$in:db.Types.ObjectId(data.userId)}},
             { $push: {timeline:{$each:[data.latestPostId], $position: 0 } }},
             {multi:true}, 
             (err, doc) =>{
@@ -58,6 +58,34 @@ export default class postModel{
               }
               
             })
+    }
+
+
+    getUserTimeLine = (data, callback) =>{
+
+        fakeUser.find({'_id': db.Types.ObjectId(data.userId) },{'email':1,_id:1})
+        .populate({
+            path: 'timeline',
+            select: 'title body user_id created_at',
+            sort: { 'timeline.title': -1 },
+            // options: {
+            //   sort: { 'timeline._id': 1 },
+            //   limit: 3
+            // },
+            populate: { path: 'user_id', select: 'email' }
+          })
+        // .populate('timeline','_id title body created_at',null, {sort: { 'timeline._id': -1 }})
+          .sort([['timeline.title',1]])
+          .slice('timeline', [0,15])
+          .then((postData)=>{
+
+            console.log(postData[0].timeline)
+            callback(null, postData)
+        }).catch((err)=>{
+            console.log(err)
+            callback(err, null)
+        })
+
     }
 
 

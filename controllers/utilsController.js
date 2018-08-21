@@ -59,6 +59,28 @@ export default class utilsController{
     }
 
 
+    followerToAllUser = (req, res, next)=>{
+        this.tomodel = {}
+        this.tomodel.userId = req.headers['user_id']
+
+
+        userModel.followerToAllUser(this.tomodel,(err, result) =>{
+            if(err || result.ok!=1){
+                return res.status(500).json({
+                    status: 0
+                })
+            }
+
+            return res.status(200).json({
+                status: 1,
+                result: result
+            })
+
+        })
+        return
+    }
+
+
     insertTimeLine = (req, res, next) =>{
         this.tomodel = {}
         this.tomodel.postId = Math.floor((Math.random() * 1000000000) + 1).toString()

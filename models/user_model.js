@@ -305,6 +305,29 @@ export default class userModel{
         })
     }
 
+
+    followerToAllUser = (data, callback) =>{
+
+      fakeUser.update(
+      { 
+        _id:{$nin:[db.Types.ObjectId(data.userId)]},
+        following:{$nin:[db.Types.ObjectId(data.userId)]}
+      },
+      { 
+        $push: {following:{$each:[data.userId], $position: 0 } }
+      },
+      // {multi:true}, 
+        (err, doc) =>{
+          console.log(err, doc)
+          if(err){
+            callback(err, null)
+          }else{
+            callback(null, doc)
+          }
+          
+        })
+    }
+
     
 
 

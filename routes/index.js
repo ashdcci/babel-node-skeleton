@@ -89,9 +89,11 @@ export default (app) =>{
             .post('/chat/insert',authToken.checkAuthToken,userProvider.checkUserName,chat.insertMessage)
             .get('/fake-user',utils.insertFakeUser)
             .patch('/follow',utils.checkAuthToken,utils.followUser)
+            .post('/follower-to-all',utils.checkAuthToken,utils.followerToAllUser)
             .post('/add-post',utils.checkAuthToken,post.addPost)
             .post('/get-post',utils.checkAuthToken,post.findPost)
             .post('/follow',utils.checkAuthToken)
+            .post('/timeline',utils.checkAuthToken,post.getUserTimeLine)
     })
 
     app.use('*',(req,res,next) =>{
