@@ -7,12 +7,14 @@ import bcapi from '../config/bcpi';
 const superSecret = 'b1N3xXrpwNPrsLZH2GmCa95TbuU6hvvKQYVDcKSKrg4PfiOCm_X8A5G_hpLvTmD_';
 const data = {}
 const tomodel = {}
+// import amqp from '../middlewares/rabbitmq';
+// const apqpMid = new amqp(); 
 const userModel = new user_model()
 
 export default class userController{
     
     constructor(){
-
+        // apqpMid.QueueReceiver()
     }
     
     getUser = (req, res, next) =>{

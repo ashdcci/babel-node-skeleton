@@ -2,11 +2,15 @@ import jwt from 'jsonwebtoken';
 import post_model from '../models/post_model';
 import async from 'async';
 import crypto from 'crypto';
+import amqp from '../middlewares/rabbitmq';
+const apqpMid = new amqp();
 import faker from 'faker'
 const superSecret = 'b1N3xXrpwNPrsLZH2GmCa95TbuU6hvvKQYVDcKSKrg4PfiOCm_X8A5G_hpLvTmD_';
 const data = {}
 const tomodel = {}
+ 
 const postModel = new post_model()
+
 
 
 export default class postController{
@@ -30,13 +34,14 @@ export default class postController{
                     msg:'problam in saving post'
                 })
             }
-
+            apqpMid.QueueSender(this.tomodel.userId,result._id)
             res.status(200).json({
                 status: 1,
                 msg: 'Post published on Platform',
                 result: result
             })
 
+            
             // this.addPostToFollowersTimeLine(req,result._id,(next)=>{
 
             //     console.log(next)
@@ -104,19 +109,19 @@ export default class postController{
         })
     }
 
-    addPostToFollowersTimeLine = (req,postId, next) =>{
+    addPostToFollowersTimeLine = (userId,postId,callback) =>{
 
         this.tomodel = {}
         this.tomodel.latestPostId = postId
-        this.tomodel.userId = req.headers['user_id']
-        this.tomodel.username = req.headers['username']
+        this.tomodel.userId = userId
         
         postModel.addPostToFollowersTimeLine(this.tomodel,(err, results) =>{
+            console.log(results)
             if(err){
                 console.log('err occured:',err)
             }
         })
-        next(1)
+        callback(1)
         return
     }
 

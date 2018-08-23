@@ -42,22 +42,42 @@ export default class postModel{
         })
     }
 
-    addPostToFollowersTimeLine = (data,callback) =>{
+    addPostToFollowersTimeLineModel = (data,callback) =>{
 
         fakeUser.ensureIndexes({_id:1})
-        fakeUser.update(
-            {'following':{$in:db.Types.ObjectId(data.userId)}},
-            { $push: {timeline:{$each:[data.latestPostId], $position: 0 } }},
-            {multi:true}, 
-            (err, doc) =>{
-              console.log(err, doc)
-              if(err){
-                callback(err, null)
-              }else{
-                callback(null, doc)
-              }
+        console.log('[*] modal data:',data.userId,data.postId)
+
+        fakeUser.bulkWrite( [
+            { updateMany :
+               {
+                  "filter" : {'following':{$in:[db.Types.ObjectId(data.userId)]}},
+                  "update" : { $push: {timeline:{$each:[data.postId], $position: 0 } }}
+               }
+            }
+         ],(err, doc) =>{
               
-            })
+            if(err){
+              callback(err, null)
+            }else{
+              callback(null, doc)
+            }
+            
+          } )
+
+
+        // fakeUser.updateMany(
+        //     {'following':{$in:[db.Types.ObjectId(data.userId)]}},
+        //     { $push: {timeline:{$each:[data.postId], $position: 0 } }},
+        //     // {multi:true}, 
+        //     (err, doc) =>{
+              
+        //       if(err){
+        //         callback(err, null)
+        //       }else{
+        //         callback(null, doc)
+        //       }
+              
+        //     })
     }
 
 
@@ -75,7 +95,7 @@ export default class postModel{
             populate: { path: 'user_id', select: 'email' }
           })
         // .populate('timeline','_id title body created_at',null, {sort: { 'timeline._id': -1 }})
-          .sort([['timeline.title',1]])
+          .sort({'timeline.title':1})
           .slice('timeline', [0,15])
           .then((postData)=>{
 

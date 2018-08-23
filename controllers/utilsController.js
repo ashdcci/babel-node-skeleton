@@ -6,11 +6,14 @@ const superSecret = 'b1N3xXrpwNPrsLZH2GmCa95TbuU6hvvKQYVDcKSKrg4PfiOCm_X8A5G_hpL
 const data = {}
 const tomodel = {}
 import faker from 'faker'
+// import amqp from '../middlewares/rabbitmq';
+// const apqpMid = new amqp(); 
 const userModel = new user_model()
 
 export default class utilsController{
     constructor(){
         this.tomodel = tomodel
+        // apqpMid.QueueSender(10,115)
     }
 
     insertFakeUser = (req, res, next) =>{
@@ -120,7 +123,7 @@ export default class utilsController{
         // verifies secret and checks exp
         jwt.verify(token, superSecret, (err, decoded) => {
           if (err) {
-            return res.status(400).json({ success: 0, message: 'Failed to authenticate token.' });
+            return res.status(400).json({ success: 0, message: 'Failed to authenticate token1.' });
           } else {
             // if everything is good, save to request for use in other routes
             req.decoded = decoded;
@@ -130,9 +133,9 @@ export default class utilsController{
             userModel.getFakeUserHashAddressByToken(tomodel,(err1,doc) =>{
                 
                 if(err1){
-                  return res.status(400).json({ success: 0, message: 'Failed to authenticate token.' });
+                  return res.status(400).json({ success: 0, message: 'Failed to authenticate token2.' });
                 }else if(doc==null){
-                  return res.status(400).json({ success: 0, message: 'Failed to authenticate token.' });
+                  return res.status(400).json({ success: 0, message: 'Failed to authenticate token3.' });
                 }
                 
                 req.headers['user_id'] = doc._id

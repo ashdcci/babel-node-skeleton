@@ -200,9 +200,11 @@ export default class userModel{
 
 
     getFakeUserHashAddressByToken = (data, callback) =>{
+      console.log(data.access_token)
       fakeUser.findOne({
         access_token: data.access_token
       }, (err, doc) =>{
+        console.log(err,doc)
           if(err){
             callback(err, null)
           }else{

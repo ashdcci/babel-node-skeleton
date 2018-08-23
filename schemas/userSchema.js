@@ -35,7 +35,7 @@ const fakeUserSchema = new Schema({
   updated_at: { type: Date, default: moment().format('YYYY-MM-DD HH:mm:ss') },
   following: {type: Array, default:[],index: true},
   // followers: {type: Array, default:[]},
-  timeline:{type:Array,default:[],index: true}
+  timeline:[{ type: Schema.Types.ObjectId, ref: 'Post' }]
 });
 
 export default {
