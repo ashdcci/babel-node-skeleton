@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js --exec babel-node --presets es2015,stage-2"
+    "start": "nodemon index.js --exec babel-node --presets es2015,stage-2",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "amqplib": "^0.5.2",
@@ -41,11 +43,13 @@
     "pdfreader": "^0.2.4",
     "rimraf": "^2.6.2",
     "socket.io": "^2.1.0",
-    "web3": "^1.0.0-beta.33"
+    "web3": "^1.0.0-beta.33",
+    "snyk": "^1.189.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1"
-  }
+  },
+  "snyk": true
 }
