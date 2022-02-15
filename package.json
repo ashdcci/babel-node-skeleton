@@ -8,7 +8,7 @@
     "start": "nodemon index.js --exec babel-node --presets es2015,stage-2"
   },
   "dependencies": {
-    "amqplib": "^0.5.2",
+    "amqplib": "^0.7.1",
     "async": "^2.6.0",
     "bigi": "^1.4.2",
     "bitcoinjs-lib": "^3.3.2",
