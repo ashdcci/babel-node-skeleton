@@ -12,7 +12,7 @@
     "async": "^2.6.0",
     "bigi": "^1.4.2",
     "bitcoinjs-lib": "^3.3.2",
-    "blockcypher": "^0.2.0",
+    "blockcypher": "^0.3.0",
     "body-parser": "^1.17.2",
     "buffer": "^5.1.0",
     "cors": "^2.8.4",
@@ -25,7 +25,7 @@
     "express": "^4.15.3",
     "express-group-routes": "^1.1.0",
     "faker": "^4.1.0",
-    "firebase": "^5.0.4",
+    "firebase": "^7.14.0",
     "fs": "0.0.1-security",
     "get-image-urls": "^1.0.5",
     "google-image-search-url-results": "^1.0.1",
@@ -38,10 +38,10 @@
     "mongoose-double": "0.0.1",
     "mongoose-int32": "^0.2.0",
     "morgan": "^1.8.2",
-    "pdfreader": "^0.2.4",
+    "pdfreader": "^1.0.3",
     "rimraf": "^2.6.2",
     "socket.io": "^2.1.0",
-    "web3": "^1.0.0-beta.33"
+    "web3": "^4.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
