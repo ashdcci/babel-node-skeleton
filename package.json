@@ -41,7 +41,7 @@
     "pdfreader": "^0.2.4",
     "rimraf": "^2.6.2",
     "socket.io": "^2.1.0",
-    "web3": "^1.0.0-beta.33"
+    "web3": "^4.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
